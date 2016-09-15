@@ -37,6 +37,7 @@ if(LIBCODEC2_FOUND)
   GR_PYTHON_INSTALL(
     PROGRAMS
     codec2_audio_loopback.py
+    grfreedv.grc
     DESTINATION ${GR_PKG_VOCODER_EXAMPLES_DIR}
     COMPONENT "vocoder_examples"
     )
