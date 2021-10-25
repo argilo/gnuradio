@@ -18,6 +18,7 @@ from .template_arg import TemplateArg
 
 attributed_str = type('attributed_str', (str,), {})
 
+from ..io import yaml
 
 @setup_names
 class Param(Element):
@@ -112,6 +113,13 @@ class Param(Element):
 
     def __repr__(self):
         return '{!r}.param[{}]'.format(self.parent, self.key)
+
+    def export_data(self):
+        value = self.value
+        if self.dtype in ['_multiline', '_multiline_python_external']:
+            if '\n' in value:
+                value = yaml.MultiLineString(value)
+        return value
 
     def is_enum(self):
         return self.get_raw('dtype') == 'enum'

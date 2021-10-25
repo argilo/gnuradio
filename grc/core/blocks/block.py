@@ -659,7 +659,7 @@ class Block(Element):
             data['name'] = self.name
             data['id'] = self.key
         data['parameters'] = collections.OrderedDict(sorted(
-            (param_id, param.value) for param_id, param in self.params.items()
+            (param_id, param.export_data()) for param_id, param in self.params.items()
             if (param_id != 'id' or self.key == 'options')
         ))
         data['states'] = collections.OrderedDict(sorted(self.states.items()))
