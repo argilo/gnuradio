@@ -15,6 +15,7 @@
 
 #include "multiply_const_impl.h"
 #include <gnuradio/io_signature.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 
 namespace gr {
@@ -73,7 +74,7 @@ int multiply_const_impl<gr_complex>::work(int noutput_items,
     gr_complex* out = (gr_complex*)output_items[0];
     int noi = noutput_items * d_vlen;
 
-    volk_32fc_s32fc_multiply_32fc(out, in, d_k, noi);
+    volk_32fc_s32fc_multiply_32fc_shim(out, in, &d_k, noi);
 
     return noutput_items;
 }

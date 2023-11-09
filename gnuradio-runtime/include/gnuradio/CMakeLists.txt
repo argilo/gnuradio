@@ -73,6 +73,7 @@ install(
           rpcserver_booter_aggregator.h
           rpcserver_booter_base.h
           rpcserver_selector.h
+          volk_shim.h
           xoroshiro128p.h
     DESTINATION ${GR_INCLUDE_DIR}/gnuradio)
 

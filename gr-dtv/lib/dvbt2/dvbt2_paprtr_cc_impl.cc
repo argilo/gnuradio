@@ -13,6 +13,7 @@
 #include "dvbt2_paprtr_cc_impl.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 #include <algorithm>
 
@@ -599,7 +600,7 @@ int dvbt2_paprtr_cc_impl::work(int noutput_items,
     const int* papr_map;
     const gr_complex one(1.0, 0.0);
     const gr_complex zero(0.0, 0.0);
-    const float normalization = 1.0 / N_TR;
+    const gr_complex normalization = 1.0 / N_TR;
     const int L_FC = (N_FC != 0);
     const int center = (C_PS - 1) / 2;
     const float aMax = 5.0 * N_TR * std::sqrt(10.0 / (27.0 * C_PS));
@@ -671,8 +672,10 @@ int dvbt2_paprtr_cc_impl::work(int noutput_items,
                     memcpy(ones_time.data(),
                            papr_fft.get_outbuf(),
                            sizeof(gr_complex) * papr_fft_size);
-                    volk_32fc_s32fc_multiply_32fc(
-                        ones_time.data(), ones_time.data(), normalization, papr_fft_size);
+                    volk_32fc_s32fc_multiply_32fc_shim(ones_time.data(),
+                                                       ones_time.data(),
+                                                       &normalization,
+                                                       papr_fft_size);
                     std::fill_n(&r[0], N_TR, 0);
                     std::fill_n(&c[0], papr_fft_size, 0);
                     for (int k = 1; k <= num_iterations; k++) {
@@ -706,7 +709,8 @@ int dvbt2_paprtr_cc_impl::work(int noutput_items,
                                 papr_fft_size;
                             ctemp[n] = std::exp(gr_complexd(0.0, vtemp));
                         }
-                        volk_32fc_s32fc_multiply_32fc(v.data(), ctemp.data(), u, N_TR);
+                        volk_32fc_s32fc_multiply_32fc_shim(
+                            v.data(), ctemp.data(), &u, N_TR);
                         volk_32f_s32f_multiply_32f(
                             (float*)rNew.data(), (float*)v.data(), alpha, N_TR * 2);
                         volk_32f_x2_subtract_32f((float*)rNew.data(),
@@ -746,8 +750,8 @@ int dvbt2_paprtr_cc_impl::work(int noutput_items,
                             ones_freq[(n + m) % papr_fft_size] = ones_time[n];
                         }
                         result = u * alpha;
-                        volk_32fc_s32fc_multiply_32fc(
-                            ctemp.data(), ones_freq.data(), result, papr_fft_size);
+                        volk_32fc_s32fc_multiply_32fc_shim(
+                            ctemp.data(), ones_freq.data(), &result, papr_fft_size);
                         volk_32f_x2_subtract_32f((float*)c.data(),
                                                  (float*)c.data(),
                                                  (float*)ctemp.data(),

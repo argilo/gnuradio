@@ -15,6 +15,7 @@
 
 #include "multiply_matrix_impl.h"
 #include <gnuradio/io_signature.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 
 namespace gr {
@@ -262,7 +263,7 @@ int multiply_matrix_impl<gr_complex>::work(int noutput_items,
         gr_complex* out = reinterpret_cast<gr_complex*>(output_items[out_idx]);
         // Do input 0 first, this saves a memset
         const gr_complex* in = reinterpret_cast<const gr_complex*>(input_items[0]);
-        volk_32fc_s32fc_multiply_32fc(out, in, d_A[out_idx][0], noutput_items);
+        volk_32fc_s32fc_multiply_32fc_shim(out, in, &d_A[out_idx][0], noutput_items);
         // Then do inputs 1 through N
         for (size_t in_idx = 1; in_idx < input_items.size(); in_idx++) {
             in = reinterpret_cast<const gr_complex*>(input_items[in_idx]);

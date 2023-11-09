@@ -45,7 +45,7 @@ private:
     int carrier_mode;
     int papr_mode;
     int equalization_enable;
-    float normalization;
+    gr_complex normalization;
     gr_complex p2_bpsk[2];
     gr_complex sp_bpsk[2];
     gr_complex cp_bpsk[2];

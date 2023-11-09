@@ -12,6 +12,7 @@
 #define INCLUDED_DIGITAL_ADAPTIVE_ALGORITHM_LMS_H
 
 #include <gnuradio/digital/adaptive_algorithm.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 #include <volk/volk_alloc.hh>
 
@@ -51,8 +52,8 @@ public:
         gr_complex err_x_mu = d_step_size * error;
 
         volk_32fc_conjugate_32fc(conj_vector.data(), in, num_taps);
-        volk_32fc_s32fc_multiply_32fc(
-            prod_vector.data(), conj_vector.data(), err_x_mu, num_taps);
+        volk_32fc_s32fc_multiply_32fc_shim(
+            prod_vector.data(), conj_vector.data(), &err_x_mu, num_taps);
         volk_32fc_x2_add_32fc(taps, taps, prod_vector.data(), num_taps);
     }
 

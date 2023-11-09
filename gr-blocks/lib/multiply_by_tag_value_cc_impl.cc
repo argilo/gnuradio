@@ -14,6 +14,7 @@
 
 #include "multiply_by_tag_value_cc_impl.h"
 #include <gnuradio/io_signature.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 
 namespace gr {
@@ -59,7 +60,7 @@ int multiply_by_tag_value_cc_impl::work(int noutput_items,
         end *= d_vlen;
 
         // Multiply based on the current value of k from 'start' to 'end'
-        volk_32fc_s32fc_multiply_32fc(&out[start], &in[start], d_k, (end - start));
+        volk_32fc_s32fc_multiply_32fc_shim(&out[start], &in[start], &d_k, (end - start));
         start = end;
 
         // Extract new value of k
@@ -75,8 +76,8 @@ int multiply_by_tag_value_cc_impl::work(int noutput_items,
         }
     }
 
-    volk_32fc_s32fc_multiply_32fc(
-        &out[start], &in[start], d_k, (d_vlen * noutput_items - start));
+    volk_32fc_s32fc_multiply_32fc_shim(
+        &out[start], &in[start], &d_k, (d_vlen * noutput_items - start));
 
     return noutput_items;
 }

@@ -13,6 +13,7 @@
 #include "dvbt2_pilotgenerator_cc_impl.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 
 namespace gr {
@@ -2701,8 +2702,8 @@ int dvbt2_pilotgenerator_cc_impl::general_work(int noutput_items,
             memcpy(
                 &dst[0], &out[ofdm_fft_size / 2], sizeof(gr_complex) * ofdm_fft_size / 2);
             ofdm_fft.execute();
-            volk_32fc_s32fc_multiply_32fc(
-                out, ofdm_fft.get_outbuf(), normalization, ofdm_fft_size);
+            volk_32fc_s32fc_multiply_32fc_shim(
+                out, ofdm_fft.get_outbuf(), &normalization, ofdm_fft_size);
             out += ofdm_fft_size;
         }
     }

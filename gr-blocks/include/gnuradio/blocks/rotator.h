@@ -13,6 +13,7 @@
 
 #include <gnuradio/blocks/api.h>
 #include <gnuradio/gr_complex.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 #include <cmath>
 
@@ -49,7 +50,7 @@ public:
 
     void rotateN(gr_complex* out, const gr_complex* in, int n)
     {
-        volk_32fc_s32fc_x2_rotator_32fc(out, in, d_phase_incr, &d_phase, n);
+        volk_32fc_s32fc_x2_rotator_32fc_shim(out, in, &d_phase_incr, &d_phase, n);
     }
 };
 

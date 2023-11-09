@@ -14,6 +14,7 @@
 #include <gnuradio/expj.h>
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
+#include <gnuradio/volk_shim.h>
 #include <algorithm>
 #include <complex>
 
@@ -1077,8 +1078,8 @@ int dvbt_reference_signals_impl::general_work(int noutput_items,
                &out[(i * d_noutput) + (ofdm_fft_size / 2)],
                sizeof(gr_complex) * ofdm_fft_size / 2);
         ofdm_fft.execute();
-        volk_32fc_s32fc_multiply_32fc(
-            &out[i * d_noutput], ofdm_fft.get_outbuf(), normalization, ofdm_fft_size);
+        volk_32fc_s32fc_multiply_32fc_shim(
+            &out[i * d_noutput], ofdm_fft.get_outbuf(), &normalization, ofdm_fft_size);
     }
 
     // Tell runtime system how many input items we consumed on

@@ -16,6 +16,7 @@
 #include <gnuradio/io_signature.h>
 
 #include <gnuradio/math.h>
+#include <gnuradio/volk_shim.h>
 #include <volk/volk.h>
 
 namespace gr {
@@ -84,7 +85,7 @@ int phase_shift_impl::work(int noutput_items,
     gr::thread::scoped_lock guard(d_setlock);
 
     if (d_shift != 0.0f) {
-        volk_32fc_s32fc_multiply_32fc(out, in, d_shift_cc, noutput_items);
+        volk_32fc_s32fc_multiply_32fc_shim(out, in, &d_shift_cc, noutput_items);
     } else {
         memcpy(out, in, sizeof(gr_complex) * noutput_items);
     }

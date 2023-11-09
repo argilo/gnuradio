@@ -233,7 +233,7 @@ private:
 
     fft::fft_complex_rev ofdm_fft;
     int ofdm_fft_size;
-    float normalization;
+    gr_complex normalization;
 
 public:
     dvbt_reference_signals_impl(int itemsize,

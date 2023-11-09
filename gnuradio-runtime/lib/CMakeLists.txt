@@ -94,7 +94,10 @@ add_library(
     vmcircbuf_mmap_shm_open.cc
     vmcircbuf_mmap_tmpfile.cc
     vmcircbuf_prefs.cc
-    vmcircbuf_sysv_shm.cc)
+    vmcircbuf_sysv_shm.cc
+    volk_shim.c)
+
+set_source_files_properties(volk_shim.c PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
 # Messages
 target_sources(
