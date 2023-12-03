@@ -85,6 +85,21 @@ class test_throttle(gr_unittest.TestCase):
         # be at most one chunksize
         self.assertLess(abs(total_time * rate - num) + 1, chunksize)
 
+    def test_foo(self):
+        start = time.monotonic()
+        last = start
+        n = 0
+        while True:
+            time.sleep(0.01)
+            now = time.monotonic()
+            n += 1
+            print(n, now - last)
+            last = now
+            if now > start + 10:
+                break
+
+        self.assertTrue(False)
+
 
 if __name__ == '__main__':
     gr_unittest.run(test_throttle)
